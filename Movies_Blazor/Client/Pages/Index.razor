@@ -1,0 +1,26 @@
+﻿@page "/"
+@inject IRepository repository
+
+    <div>
+        <button @onclick="AddNewMovie">Add New Movie</button>
+        <h3>Movie</h3>
+        <MoviesList Movies="movies" />
+    </div>
+
+@code{
+
+    List<Movie> movies;
+    protected async override Task OnInitializedAsync()
+    {
+        movies = repository.GetMovies();
+    }
+
+    public void AddNewMovie()
+    {
+        movies.Add(new Movie
+        {
+            Title = "Sillu Karuppati",
+            ReleaseDate = DateTime.Now
+        });
+    }
+}

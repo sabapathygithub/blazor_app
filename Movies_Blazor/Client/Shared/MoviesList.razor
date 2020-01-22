@@ -1,0 +1,28 @@
+﻿@inject IJSRuntime js
+
+<input type="checkbox" @bind="displayDelete" />
+
+<GenericList List="Movies">
+    <ElementTemplate>
+        <MovieItem Movie="context" DeleteMovie="DeleteMovie" DisplayDelete="displayDelete" />
+    </ElementTemplate>    
+</GenericList>
+
+@code {
+
+    [Parameter]
+    public List<Movie> Movies { get; set; }
+
+    bool displayDelete = false;
+
+    async Task DeleteMovie(Movie movie)
+    {
+        await js.LogMessage("Delete Movie");
+        bool confirm = await js.Confirm($"Are you sure want to delete {movie.Title}?");
+        if (confirm)
+        {
+            Movies.Remove(movie);
+        }
+    }
+
+}
