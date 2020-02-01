@@ -3,13 +3,15 @@
 
     <div>
         <button @onclick="AddNewMovie">Add New Movie</button>
-        <h3>Movie</h3>
+        <h3 style="color:@AppState.Color">Movie</h3>
         <MoviesList Movies="movies" />
     </div>
 
 @code{
 
     List<Movie> movies;
+    [CascadingParameter]
+    public AppState AppState { get; set; }
     protected async override Task OnInitializedAsync()
     {
         movies = repository.GetMovies();

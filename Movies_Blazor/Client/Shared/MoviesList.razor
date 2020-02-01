@@ -4,25 +4,46 @@
 
 <GenericList List="Movies">
     <ElementTemplate>
-        <MovieItem Movie="context" DeleteMovie="DeleteMovie" DisplayDelete="displayDelete" />
+        <MovieItem  Movie="context" DeleteMovie="DeleteMovie" DisplayDelete="displayDelete" />
     </ElementTemplate>    
 </GenericList>
 
-@code {
+<Confirmation @ref="confirmation" onConfirm="OnConfirm" onCancel="OnCancel">
+    <div>Are you sure want to delete @movieTobeDeleted.Title?</div>
+</Confirmation>
 
+@code {
+    Confirmation confirmation;
+    Movie movieTobeDeleted;
     [Parameter]
-    public List<Movie> Movies { get; set; }
+    public List<Movie> Movies { get; set; }    
 
     bool displayDelete = false;
 
     async Task DeleteMovie(Movie movie)
     {
-        await js.LogMessage("Delete Movie");
-        bool confirm = await js.Confirm($"Are you sure want to delete {movie.Title}?");
-        if (confirm)
-        {
-            Movies.Remove(movie);
-        }
+        movieTobeDeleted = movie;
+        confirmation.Show();
+        //await js.LogMessage("Delete Movie");
+
+        //bool confirm = await js.Confirm($"Are you sure want to delete {movie.Title}?");
+        //if (confirm)
+        //{
+        //    Movies.Remove(movie);
+        //}
+    }
+
+    void OnConfirm()
+    {
+        Movies.Remove(movieTobeDeleted);
+        confirmation.Hide();
+        movieTobeDeleted = null;
+    }
+
+    void OnCancel()
+    {
+        confirmation.Hide();
+        movieTobeDeleted = null;
     }
 
 }
